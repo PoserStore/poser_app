@@ -12,8 +12,8 @@ const UserController = {
         return res.status(400).json({ message: 'Usuário já existe' });
       }
 
-      // Criptografa a senha
-      const hashedPassword = await bcrypt.hash(senha, 10);
+      // Criptografa a senha, a criptografia pode ser bem grande então não esquece de verificar se tem bastante casas pra trazer ela
+      const hashedPassword = await bcrypt.hash(senha, 100);
 
       // Cria o novo usuário
       const userData = { nome, cpf, telefone, email, username, senha: hashedPassword };
@@ -32,7 +32,7 @@ const UserController = {
     // Verifica se o usuário existe
     UserModel.findByEmail(email, async (err, result) => {
       if (err || result.length === 0) {
-        return res.status(400).json({ message: 'Usuário não encontrado' });
+        return res.status(401).json({ message: 'Usuário não encontrado' });
       }
 
       const user = result[0];
@@ -40,10 +40,10 @@ const UserController = {
       // Verifica a senha
       const validPassword = await bcrypt.compare(senha, user.senha);
       if (!validPassword) {
-        return res.status(400).json({ message: 'Senha incorreta' });
+        return res.status(401).json({ message: 'Senha incorreta' });
       }
 
-      // Gera um token JWT
+      // Gera um token JWT 
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
       res.json({ token });
     });

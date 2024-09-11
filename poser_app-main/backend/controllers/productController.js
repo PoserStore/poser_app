@@ -5,7 +5,7 @@ const ProductController = {
   create: (req, res) => {
     const { cor, tamanho, preco, quantidade, tipo } = req.body;
 
-    // Cria o novo produto
+    // Cria novo produto
     const productData = { cor, tamanho, preco, quantidade, tipo };
     ProductModel.create(productData, (err, result) => {
       if (err) {
@@ -15,7 +15,7 @@ const ProductController = {
     });
   },
 
-  // Método para listar todos os produtos
+  // Listar os produtos
   getAll: (req, res) => {
     ProductModel.getAll((err, result) => {
       if (err) {
@@ -25,7 +25,7 @@ const ProductController = {
     });
   },
 
-  // Método para buscar um produto por ID
+  // Buscar POR ID
   getById: (req, res) => {
     const { id } = req.params;
 
@@ -37,7 +37,7 @@ const ProductController = {
     });
   },
 
-  // Método para atualizar um produto por ID
+  // Atualizando produto pelo ID dele
   update: (req, res) => {
     const { id } = req.params;
     const { cor, tamanho, preco, quantidade, tipo } = req.body;
@@ -52,13 +52,13 @@ const ProductController = {
     });
   },
 
-  // Método para deletar um produto por ID
+  // Deleta produto sempre por ID 
   delete: (req, res) => {
     const { id } = req.params;
 
     ProductModel.delete(id, (err, result) => {
       if (err) {
-        return res.status(500).json({ message: 'Erro ao deletar o produto' });
+        return res.status(401).json({ message: 'Erro ao deletar o produto' });
       }
       res.status(200).json({ message: 'Produto deletado com sucesso' });
     });
